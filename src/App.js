@@ -1,23 +1,32 @@
-import logo from './logo.svg';
-import './App.css';
+import { useCallback, useState } from 'react';
+import Toggle from './components/Toggle/Toggle';
+import ListDisplay from './components/ListDisplay/ListDisplay';
+import './App.scss';
 
-function App() {
+const  App = () => {
+  const [displayList, setDisplayList] = useState([]);
+
+  const onListItemToggle = useCallback((id) => {
+    if (displayList.includes(id)) {
+      setDisplayList(displayList.filter(item => item !== id));
+    } else {
+      setDisplayList(prevState => [...prevState, id]);
+    }
+  }, [displayList]);
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <div className='container'>
+        <div className='appSidebar'>
+          <Toggle
+            displayList={displayList}
+            onToggle={onListItemToggle}
+          />
+        </div>
+        <div className='appBody'>
+          <ListDisplay list={displayList} />
+        </div>
+      </div>
     </div>
   );
 }
